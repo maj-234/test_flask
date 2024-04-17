@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <title> {% block title %} {% endblock %}</title>
-<link rel="stylesheet" href="{{ url_for('static', file_name='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
     <h1>Flaskr</h1>
     <ul>
         {% if g.user %}
         <li> {{ g.user['username']}} </li>
-        <li> <a href="url_for('auth.logout')"> Log Out</a> </li>
+        <li> <a href="{{ url_for('auth.logout') }}"> Log Out</a> </li>
         {% else %}
-        <li><a href="url_for('auth.login')">Log In</a></li>
-        <li><a href="url_for('auth.register')">Register</a></li>
+        <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+        <li><a href="{{ url_for('auth.register') }}">Register</a></li>
         {% endif %}
     </ul>
 </nav>
