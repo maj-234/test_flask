@@ -16,5 +16,4 @@ def index():
 
 bp.route('/create', methods=("GET", "POST"))
 def create():
-    db = get_db()
-    
+    return render_template('blog/create.html')
