@@ -32,6 +32,13 @@ def init_db_command():
     d = get_db().execute("PRAGMA table_info(post)").fetchall()
     click.echo(f"table post column: {[name[1] for name in d]}")
 
+@click.command('get-post')
+def get_post_command():
+    posts = get_db().execute("SELECT * FROM post").fetchall()
+    for post in posts:
+        click.echo(str(post))
+
 def init_app(app):
      app.teardown_appcontext(close_db)
      app.cli.add_command(init_db_command)
+     app.cli.add_command(get_post_command)
