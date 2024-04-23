@@ -1,21 +1,18 @@
 from flask import Blueprint, render_template, request, flash, g, redirect
 from .db import get_db
-from .auth import login_required
+
 bp = Blueprint('blog', __name__, url_prefix="/blog")
 
 @bp.route('/')
 def index():
     db = get_db()
     posts = db.execute(
-        'SELECT post.id, title, body, created, author_id, usernaem'
-        'FROM post INNER JOIN user ON post.author_id = user.id'
-        'ORDER BY created DESC'
+        'SELECT post.id, title, body, created, author_id, username FROM post INNER JOIN user ON post.author_id = user.id ORDER BY created DESC'
     ).fetchall()
-    return render_template('blog/index/html', posts=posts)
+    return render_template('blog/index.html', posts=posts)
 
 
 @bp.route('/create', methods=("GET", "POST"))
-@login_required
 def create():
     if request.method == "POST":
         title = request.form['title']
@@ -28,11 +25,10 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO post (title, body, author_id )'
-                'VALUES (?, ?, ?)'
+                'INSERT INTO post (title, body, author_id ) VALUES (?, ?, ?)',
                 (title, body, g.user['id'])
             )
             db.commit()
-            return redirect('blog.index')
+            return redirect('/blog')
 
     return render_template('blog/create.html')

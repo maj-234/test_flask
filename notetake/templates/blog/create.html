@@ -2,6 +2,7 @@
 
 {% block header %}
 <h1> {% block title %} Create {% endblock %}</h1>
+<h2> User: {{ session.user_id }} {{ g.user['username'] }} </h2>
 {% endblock %}
 
 {% block content%}

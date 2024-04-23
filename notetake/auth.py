@@ -26,10 +26,11 @@ def register():
                     "INSERT INTO user (username, password) VALUES (?, ?)",
                     (username, generate_password_hash(passwd))
                 )
+                db.commit()
             except db.IntegrityError:
-                error = f'user {username} is already existed'
+                error = f'User {username} existed'
             else:
-                return redirect(url_for('auth.login'))
+                return redirect('login')
         flash(error)
 
     return render_template('auth/register.html') 
@@ -55,7 +56,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            return redirect(url_for('blog.index'))
         flash(error)
     return render_template('auth/login.html')
 
@@ -79,11 +80,17 @@ def load_logged_in_user():
         ).fetchone()
 
 
-def login_required(view):
-    @functools.warps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
-        else:
-            return view(**kwargs)
-    return wrapped_view
+# def login_required(view):
+#     @functools.warps(view)
+#     def wrapped_view(**kwargs):
+#         if g.user is None:
+#             return redirect(url_for('auth.login'))
+#         else:
+#             return view(**kwargs)
+#     return wrapped_view
+
+
+@bp.route('refresh')
+def refresh():
+    session.clear()
+    return redirect('/blog')
