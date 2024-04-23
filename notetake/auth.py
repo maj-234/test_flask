@@ -2,7 +2,7 @@ import functools
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import g, flash, redirect, Blueprint, request, url_for, render_template, session
-
+from functools import wraps
 from .db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -80,14 +80,14 @@ def load_logged_in_user():
         ).fetchone()
 
 
-# def login_required(view):
-#     @functools.warps(view)
-#     def wrapped_view(**kwargs):
-#         if g.user is None:
-#             return redirect(url_for('auth.login'))
-#         else:
-#             return view(**kwargs)
-#     return wrapped_view
+def login_required(view):
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+        else:
+            return view(*args, **kwargs)
+    return wrapped_view
 
 
 @bp.route('refresh')

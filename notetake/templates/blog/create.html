@@ -7,9 +7,9 @@
 
 {% block content%}
 <form method="post">
-    <label for="title"></label>
+    <label for="title">title</label>
     <input type="text" name="title" id="title" value="{{ request.form['title'] }}">
-    <label for="body"></label>
+    <label for="body">body</label>
     <textarea name="body" id="body" > {{ request.form['body'] }}</textarea>
     <input type="submit" value="Save">
 </form>
